@@ -129,7 +129,7 @@ export function SelectableItems<T extends number = number>({
 
 				<SelectableItems
 					{...props}
-					style={{ marginLeft: "4px", ...(props.style || {}) }}
+					style={{ paddingLeft: "4px", ...(props.style || {}) }}
 					//
 					nth={nextNth}
 					count={count}
