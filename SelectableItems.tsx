@@ -160,7 +160,7 @@ export function SelectableItems<T extends number = number>({
 				key={count}
 				onClick={onClick}
 			>
-					<ItemComponent />
+				<ItemComponent />
 				<SelectableItems
 					{...props}
 					style={{ paddingLeft: "4px", ...(props.style || {}) }}
@@ -179,7 +179,7 @@ export function SelectableItems<T extends number = number>({
 					selectionStrategy={selectionStrategy}
 					selectionDirection={selectionDirection}
 				>
-				{children}
+					{children}
 				</SelectableItems>
 			</div>
 		</Wrapper>
