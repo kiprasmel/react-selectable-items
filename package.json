@@ -14,5 +14,9 @@
   },
   "peerDependencies": {
     "react": ">=16"
+  },
+  "repository": {
+  	"type": "git",
+	"url": "http://github.com/kiprasmel/react-selectable-items"
   }
 }
