@@ -40,6 +40,21 @@ function StarFilled() {
 
 ```
 
+### styling
+
+```css
+.selectable-items__initial-wrapper { }
+
+.selectable-items__item { }
+
+.selectable-items__item--selected { }
+.selectable-items__item--not-selected { }
+
+.selectable-items__item--first { }
+.selectable-items__item--last { }
+
+```
+
 ## License
 
 [MIT](./LICENSE) (c) 2022 Kipras Melnikovas
