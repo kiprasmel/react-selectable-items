@@ -9,7 +9,8 @@ export type IndividualItemsProps<T extends number = number> = React.HTMLAttribut
 	nth?: NumberWith01<T>;
 };
 
-export type SelectionStrategy = "all-before-and-current" | "only-current" | "current-and-all-after"; // TODO `| ({ selectedUpUntil, nth }) => boolean`
+export type SelectionStrategy = "all-before-and-current" | "only-current"; // TODO `| ({ selectedUpUntil, nth }) => boolean`
+export type SelectionDirection = "left-to-right" | "right-to-left";
 
 export type SelectableItemsProps<T extends number = number> = IndividualItemsProps<T> & {
 	/**
@@ -17,7 +18,12 @@ export type SelectableItemsProps<T extends number = number> = IndividualItemsPro
 	 */
 	selectedUpUntil: NumberWith01<T>;
 	setSelectedUpUntil: (nthOrZero: NumberWith01<T>) => void;
+
 	selectionStrategy: SelectionStrategy;
+	/**
+	 * @default {"left-to-right"}
+	 */
+	selectionDirection?: SelectionDirection;
 
 	/**
 	 * @default {true}
@@ -45,6 +51,7 @@ export function SelectableItems<T extends number = number>({
 	selectedUpUntil,
 	setSelectedUpUntil,
 	selectionStrategy,
+	selectionDirection = "left-to-right",
 	//
 	isFirst = true,
 	//
@@ -53,15 +60,27 @@ export function SelectableItems<T extends number = number>({
 	//
 	...props
 }: SelectableItemsProps<T>) {
-	if (count <= 0) {
+	let hasRenderedAll: boolean;
+
+	let nextNth: NumberWith01<T>;
+
+	if (selectionDirection === "left-to-right") {
+		hasRenderedAll = nth > count;
+		nextNth = (nth + 1) as NumberWith01<T>;
+	} else if (selectionDirection === "right-to-left") {
+		if (isFirst) {
+			nth = count;
+		}
+
+		hasRenderedAll = nth <= 0;
+		nextNth = (nth - 1) as NumberWith01<T>;
+	} else {
+		assertNever(selectionDirection);
+	}
+
+	if (hasRenderedAll) {
 		return null;
 	}
-	/**
-	 * hard to prove with types, but the `count <= 0`
-	 * check above should cover it.
-	 */
-	const nextNth: NumberWith01<T> = (nth + 1) as NumberWith01<T>;
-	const nextCount: NumberWith01<T> = (count - 1) as NumberWith01<T>;
 
 	// const A = ({ children }: React.PropsWithChildren<{}>) => <div>{children}</div>;
 	const A = ({ children }: any) => <div>{children}</div>;
@@ -73,8 +92,6 @@ export function SelectableItems<T extends number = number>({
 			? selectedUpUntil >= nth
 			: selectionStrategy === "only-current"
 			? selectedUpUntil === nth
-			: selectionStrategy === "current-and-all-after"
-			? selectedUpUntil <= nth
 			: assertNever(selectionStrategy);
 
 	const ItemComponent = isSelected ? ItemSelected : ItemEmpty;
@@ -115,7 +132,7 @@ export function SelectableItems<T extends number = number>({
 					style={{ marginLeft: "4px", ...(props.style || {}) }}
 					//
 					nth={nextNth}
-					count={nextCount}
+					count={count}
 					isFirst={false}
 					//
 					ItemEmpty={ItemEmpty}
@@ -126,6 +143,7 @@ export function SelectableItems<T extends number = number>({
 					selectedUpUntil={selectedUpUntil}
 					setSelectedUpUntil={setSelectedUpUntil}
 					selectionStrategy={selectionStrategy}
+					selectionDirection={selectionDirection}
 				/>
 			</div>
 		</Wrapper>
@@ -135,4 +153,3 @@ export function SelectableItems<T extends number = number>({
 export function assertNever(x: never): never {
 	throw new Error(`assertNever: expected ${x} to be never`);
 }
-

@@ -24,7 +24,9 @@ export function Stars() {
 		
 		selectedUpUntil={starsSelectedUpUntil}
 		setSelectedUpUntil={setStarsSelectedUpUntil}
+		
 		selectionStrategy="all-before-and-current"
+		selectionDirection="left-to-right"
 	/>
 }
 	
