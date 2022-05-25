@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+
 import React from "react";
 
 export type Unselected = 0;
@@ -42,6 +44,18 @@ export type SelectableItemsProps<T extends number = number> = IndividualItemsPro
 	ItemSelected: React.ElementType;
 };
 
+export const selectableItemsClassPrefix = "selectable-items";
+export const classNames = {
+	initialWrapper: selectableItemsClassPrefix + "__initial-wrapper",
+
+	item: selectableItemsClassPrefix + "__item",
+	mItemFirst: selectableItemsClassPrefix + "__item--first",
+	mItemLast: selectableItemsClassPrefix + "__item--last",
+
+	mItemStateSelected: selectableItemsClassPrefix + "__item--selected",
+	mItemStateNotSelected: selectableItemsClassPrefix + "__item--not-selected",
+} as const;
+
 export function SelectableItems<T extends number = number>({
 	count,
 	nth = 1,
@@ -60,11 +74,12 @@ export function SelectableItems<T extends number = number>({
 	//
 	...props
 }: SelectableItemsProps<T>) {
+	let isLast: boolean;
 	let hasRenderedAll: boolean;
-
 	let nextNth: NumberWith01<T>;
 
 	if (selectionDirection === "left-to-right") {
+		isLast = nth === count;
 		hasRenderedAll = nth > count;
 		nextNth = (nth + 1) as NumberWith01<T>;
 	} else if (selectionDirection === "right-to-left") {
@@ -72,6 +87,7 @@ export function SelectableItems<T extends number = number>({
 			nth = count;
 		}
 
+		isLast = nth === 1;
 		hasRenderedAll = nth <= 0;
 		nextNth = (nth - 1) as NumberWith01<T>;
 	} else {
@@ -82,8 +98,8 @@ export function SelectableItems<T extends number = number>({
 		return null;
 	}
 
-	// const A = ({ children }: React.PropsWithChildren<{}>) => <div>{children}</div>;
-	const A = ({ children }: any) => <div>{children}</div>;
+	// const A = ({ children }: React.PropsWithChildren<{}>) => <div className={classNames.initialWrapper}>{children}</div>;
+	const A = ({ children }: any) => <div className={classNames.initialWrapper}>{children}</div>;
 	const B = ({ children }: any) => <>{children}</>;
 	const Wrapper = isFirst ? A : B;
 
@@ -93,6 +109,17 @@ export function SelectableItems<T extends number = number>({
 			: selectionStrategy === "only-current"
 			? selectedUpUntil === nth
 			: assertNever(selectionStrategy);
+
+	const itemClassname: string =
+		classNames.item +
+		(isFirst
+			? " " + classNames.mItemFirst //
+			: isLast
+			? " " + classNames.mItemLast
+			: "") +
+		(isSelected
+			? " " + classNames.mItemStateSelected //
+			: " " + classNames.mItemStateNotSelected);
 
 	const ItemComponent = isSelected ? ItemSelected : ItemEmpty;
 
@@ -118,6 +145,7 @@ export function SelectableItems<T extends number = number>({
 	return (
 		<Wrapper>
 			<div
+				className={itemClassname}
 				role="button"
 				tabIndex={0}
 				{...props}
