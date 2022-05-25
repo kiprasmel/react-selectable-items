@@ -42,6 +42,11 @@ export type SelectableItemsProps<T extends number = number> = IndividualItemsPro
 
 	ItemEmpty: React.ElementType;
 	ItemSelected: React.ElementType;
+
+	/**
+	 * internal
+	 */
+	children?: React.ReactElement | null;
 };
 
 export const selectableItemsClassPrefix = "selectable-items";
@@ -72,6 +77,8 @@ export function SelectableItems<T extends number = number>({
 	ItemEmpty,
 	ItemSelected,
 	//
+	children = null,
+	//
 	...props
 }: SelectableItemsProps<T>) {
 	let isLast: boolean;
@@ -95,7 +102,7 @@ export function SelectableItems<T extends number = number>({
 	}
 
 	if (hasRenderedAll) {
-		return null;
+		return children;
 	}
 
 	// const A = ({ children }: React.PropsWithChildren<{}>) => <div className={classNames.initialWrapper}>{children}</div>;
@@ -149,12 +156,11 @@ export function SelectableItems<T extends number = number>({
 				role="button"
 				tabIndex={0}
 				{...props}
-				style={{ display: "inline", ...(props.style || {}) }}
+				style={{ display: "inline-block", ...(props.style || {}) }}
 				key={count}
 				onClick={onClick}
 			>
-				<ItemComponent />
-
+					<ItemComponent />
 				<SelectableItems
 					{...props}
 					style={{ paddingLeft: "4px", ...(props.style || {}) }}
@@ -172,7 +178,9 @@ export function SelectableItems<T extends number = number>({
 					setSelectedUpUntil={setSelectedUpUntil}
 					selectionStrategy={selectionStrategy}
 					selectionDirection={selectionDirection}
-				/>
+				>
+				{children}
+				</SelectableItems>
 			</div>
 		</Wrapper>
 	);
