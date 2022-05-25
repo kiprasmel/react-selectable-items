@@ -1,6 +1,6 @@
 {
   "name": "react-selectable-items",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/SelectableItems.js",
   "types": "dist/SelectableItems.d.ts",
   "author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
@@ -16,7 +16,7 @@
     "react": ">=16"
   },
   "repository": {
-  	"type": "git",
-	"url": "http://github.com/kiprasmel/react-selectable-items"
+    "type": "git",
+    "url": "http://github.com/kiprasmel/react-selectable-items"
   }
 }
