@@ -6,7 +6,8 @@
   "author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
   "license": "MIT",
   "scripts": {
-    "prepack": "yarn tsc -b"
+	"build": "yarn tsc -b",
+    "prepack": "yarn build"
   },
   "devDependencies": {
     "@types/react": "18.0.9",
