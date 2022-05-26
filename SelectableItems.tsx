@@ -154,25 +154,26 @@ export function SelectableItems<T extends number = number>({
 				onClick={onClick}
 			>
 				<ItemComponent />
-				<SelectableItems
-					{...props}
-					style={{ paddingLeft: "4px", ...(props.style || {}) }}
-					//
-					nth={nextNth}
-					count={count}
-					isFirst={false}
-					//
-					ItemEmpty={ItemEmpty}
-					ItemSelected={ItemSelected}
-					//
-					stopPropagation={stopPropagation}
-					//
-					selectedUpUntil={selectedUpUntil}
-					setSelectedUpUntil={setSelectedUpUntil}
-					selectionStrategy={selectionStrategy}
-					selectionDirection={selectionDirection}
-				/>
 			</div>
+
+			<SelectableItems
+				{...props}
+				style={{ paddingLeft: "4px", ...(props.style || {}) }}
+				//
+				nth={nextNth}
+				count={count}
+				isFirst={false}
+				//
+				ItemEmpty={ItemEmpty}
+				ItemSelected={ItemSelected}
+				//
+				stopPropagation={stopPropagation}
+				//
+				selectedUpUntil={selectedUpUntil}
+				setSelectedUpUntil={setSelectedUpUntil}
+				selectionStrategy={selectionStrategy}
+				selectionDirection={selectionDirection}
+			/>
 		</Wrapper>
 	);
 }
