@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 export type Unselected = 0;
 export type FirstItem = 1;
@@ -134,6 +134,8 @@ export function SelectableItems<T extends number = number>({
 		);
 	};
 
+	const buttonRef = useRef<HTMLDivElement | null>(null);
+
 	const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		if (stopPropagation) {
 			e.stopPropagation();
@@ -142,6 +144,38 @@ export function SelectableItems<T extends number = number>({
 		handleSelectionClick();
 	};
 
+	// accessibility
+	const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+		//console.log("e.key", e.keyCode, e.key, e.code, e)
+
+		const keys = ["Enter", "Spacebar", " "];
+
+		if (!keys.includes(e.key)) {
+			return;
+		}
+
+
+		console.log("btn ref", buttonRef.current)
+
+		e.preventDefault();
+
+		handleSelectionClick();
+
+		/**
+		 * this will not work, because we focus,
+		 * but then the component gets re-rendered
+		 * & you lose the focus.
+		 * see instead the `useEffect` below.
+		 */
+		// buttonRef.current?.focus();
+	};
+	useEffect(() => {
+		const isTheOneSelected = selectedUpUntil === nth;
+		if (buttonRef.current && isTheOneSelected) {
+			buttonRef.current.focus();
+		}
+	}, []);
+
 	return (
 		<Wrapper>
 			<div
@@ -149,9 +183,11 @@ export function SelectableItems<T extends number = number>({
 				role="button"
 				tabIndex={0}
 				{...props}
-				style={{ display: "inline-block", ...(props.style || {}) }}
+				style={{ display: "inline-block", cursor: "pointer", ...(props.style || {}) }}
 				key={count}
 				onClick={onClick}
+				ref={buttonRef}
+				onKeyDown={onKeyDown}
 			>
 				<ItemComponent />
 			</div>
