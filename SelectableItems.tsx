@@ -100,10 +100,6 @@ export function SelectableItems<T extends number = number>({
 		assertNever(selectionDirection);
 	}
 
-	if (hasRenderedAll) {
-		return null;
-	}
-
 	const NoWrapper: Wrapper = ({ children }) => <>{children}</>;
 	const ActualWrapper: Wrapper = isFirst ? Wrapper : NoWrapper;
 
@@ -174,6 +170,10 @@ export function SelectableItems<T extends number = number>({
 			buttonRef.current.focus();
 		}
 	}, []);
+
+	if (hasRenderedAll) {
+		return null;
+	}
 
 	return (
 		<ActualWrapper>
