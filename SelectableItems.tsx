@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 
-import React, { useRef, useEffect } from "react";
+import React, { FC, useRef, useEffect } from "react";
 
 export type Unselected = 0;
 export type FirstItem = 1;
@@ -13,6 +13,8 @@ export type IndividualItemsProps<T extends number = number> = React.HTMLAttribut
 
 export type SelectionStrategy = "all-before-and-current" | "only-current"; // TODO `| ({ selectedUpUntil, nth }) => boolean`
 export type SelectionDirection = "left-to-right" | "right-to-left";
+
+export type Wrapper = FC<{ children: any }>;
 
 export type SelectableItemsProps<T extends number = number> = IndividualItemsProps<T> & {
 	/**
@@ -42,6 +44,8 @@ export type SelectableItemsProps<T extends number = number> = IndividualItemsPro
 
 	ItemEmpty: React.ElementType;
 	ItemSelected: React.ElementType;
+
+	Wrapper?: Wrapper;
 };
 
 export const selectableItemsClassPrefix = "selectable-items";
@@ -72,6 +76,8 @@ export function SelectableItems<T extends number = number>({
 	ItemEmpty,
 	ItemSelected,
 	//
+	Wrapper = ({ children }) => <div className={classNames.initialWrapper}>{children}</div>,
+	//
 	...props
 }: SelectableItemsProps<T>) {
 	let isLast: boolean;
@@ -98,10 +104,8 @@ export function SelectableItems<T extends number = number>({
 		return null;
 	}
 
-	// const A = ({ children }: React.PropsWithChildren<{}>) => <div className={classNames.initialWrapper}>{children}</div>;
-	const A = ({ children }: any) => <div className={classNames.initialWrapper}>{children}</div>;
-	const B = ({ children }: any) => <>{children}</>;
-	const Wrapper = isFirst ? A : B;
+	const NoWrapper: Wrapper = ({ children }) => <>{children}</>;
+	const ActualWrapper: Wrapper = isFirst ? Wrapper : NoWrapper;
 
 	const isSelected: boolean =
 		selectionStrategy === "all-before-and-current"
@@ -172,7 +176,7 @@ export function SelectableItems<T extends number = number>({
 	}, []);
 
 	return (
-		<Wrapper>
+		<ActualWrapper>
 			<div
 				className={itemClassname}
 				role="button"
@@ -204,8 +208,10 @@ export function SelectableItems<T extends number = number>({
 				setSelectedUpUntil={setSelectedUpUntil}
 				selectionStrategy={selectionStrategy}
 				selectionDirection={selectionDirection}
+				//
+				Wrapper={Wrapper}
 			/>
-		</Wrapper>
+		</ActualWrapper>
 	);
 }
 
