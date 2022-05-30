@@ -146,16 +146,11 @@ export function SelectableItems<T extends number = number>({
 
 	// accessibility
 	const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-		//console.log("e.key", e.keyCode, e.key, e.code, e)
-
 		const keys = ["Enter", "Spacebar", " "];
 
 		if (!keys.includes(e.key)) {
 			return;
 		}
-
-
-		console.log("btn ref", buttonRef.current)
 
 		e.preventDefault();
 
