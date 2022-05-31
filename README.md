@@ -42,6 +42,8 @@ function StarFilled() {
 
 ### styling
 
+though, we've never actually used this ourselves
+
 ```css
 .selectable-items__initial-wrapper { }
 
@@ -55,7 +57,53 @@ function StarFilled() {
 
 ```
 
+## example with an error state
+
+you can do all the same, but additionally provide a `Wrapper` prop,
+thus overriding our default & very minimal wrapper,
+and in your Wrapper you can e.g. show a red border if the field was required but wasn't selected.
+
+```ts
+import styled from '@emotion/styled';
+
+export function Stars() {
+	const [starsSelectedUpUntil, setStarsSelectedUpUntil] = useState<FeedbackRating>(0)
+	const [hasError, setHasError] = useState<boolean>(false)
+
+	return <SelectableItems<FeedbackRating>
+		count={5}
+		
+		ItemEmpty={StarEmpty}
+		ItemSelected={StarFilled}
+		
+		selectedUpUntil={starsSelectedUpUntil}
+		setSelectedUpUntil={setStarsSelectedUpUntil}
+		
+		selectionStrategy="all-before-and-current"
+		selectionDirection="left-to-right"
+
+		Wrapper={({ children }) => (
+			<ErrorBorderWrapper hasError={!!hasError}>
+				{children}
+			</ErrorBorderWrapper>
+		)}
+	/>
+}
+
+const ErrorBorderWrapper = styled.div<{ hasError: boolean }>`
+	display: inline-block;
+
+	${({ hasError }) =>
+		!hasError
+			? ``
+			: `
+		border: 1px solid red;
+		border-radius: 4px;
+	`}
+`;
+
+```
+
 ## License
 
 [MIT](./LICENSE) (c) 2022 Kipras Melnikovas
-
