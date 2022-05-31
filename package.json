@@ -1,6 +1,6 @@
 {
   "name": "react-selectable-items",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "main": "dist/SelectableItems.js",
   "types": "dist/SelectableItems.d.ts",
   "author": "Kipras Melnikovas <kipras@kipras.org> (https://kipras.org/)",
