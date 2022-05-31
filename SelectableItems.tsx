@@ -183,7 +183,7 @@ export function SelectableItems<T extends number = number>({
 				tabIndex={0}
 				{...props}
 				style={{ display: "inline-block", cursor: "pointer", ...(props.style || {}) }}
-				key={count}
+				key={nth}
 				onClick={onClick}
 				ref={buttonRef}
 				onKeyDown={onKeyDown}
